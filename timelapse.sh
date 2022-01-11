@@ -14,7 +14,7 @@ green "Enter the ammount of time between images: "
 read interval
 green "Enter the print name (folder will be created): "
 read printname
-mkdir $printname
+mkdir $printname 2>/dev/null
 
 est_time=$(date -d "$printtime" "+%s")
 green "Starting at: $(date)"
@@ -26,7 +26,10 @@ green "Press enter to start capture"
 read
 while [ $(date "+%s") -lt ${est_time} ]; do
     green "Capturing image: $num"
-    ffmpeg -i http://$printerip:8080/?action=stream -f image2 -frames:v 1 ${printname}/${printname}-${num}.png
+    ffmpeg -i http://$printerip:8080/?action=stream -f image2 -frames:v 1 ${printname}/${printname}-${num}.png 1> /dev/null
+    green "Finished capturing image: $num"
+    green "Time remaining: $(date -d @$(($est_time - $(date "+%s"))) +%H:%M:%S)"
+    green "Next capture in $interval seconds"
     sleep ${interval}
     num=$((num+1))
 done
