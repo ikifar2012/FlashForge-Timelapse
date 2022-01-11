@@ -26,7 +26,7 @@ green "Press enter to start capture"
 read
 while [ $(date "+%s") -lt ${est_time} ]; do
     green "Capturing image: $num"
-    ffmpeg -i http://$printerip:8080/?action=stream -f image2 -frames:v 1 ${printname}/${printname}-${num}.png 1> /dev/null
+    ffmpeg -i http://$printerip:8080/?action=stream -loglevel error -f image2 -frames:v 1 ${printname}/${printname}-${num}.png 1> /dev/null 
     green "Finished capturing image: $num"
     green "Time remaining: $(date -d @$(($est_time - $(date "+%s"))) +%H:%M:%S)"
     green "Next capture in $interval seconds"
